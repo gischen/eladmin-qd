@@ -4,28 +4,27 @@
     <breadcrumb class="breadcrumb-container"/>
 
     <div class="right-menu">
-      <template>
-        <el-tooltip content="更新公告" effect="dark" placement="bottom">
-          <Placard class="screenfull right-menu-item"/>
-        </el-tooltip>
-      </template>
       <template v-if="device!=='mobile'">
         <el-tooltip content="全屏" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
       </template>
-
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <img :src="user.avatar" class="user-avatar">
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
+          <a target="_blank" href="https://docs.auauz.net/">
             <el-dropdown-item>
-              首页
+              项目文档
             </el-dropdown-item>
-          </router-link>
+          </a>
+          <span style="display:block;" @click="show = true">
+            <el-dropdown-item>
+              布局设置
+            </el-dropdown-item>
+          </span>
           <router-link to="/user/center">
             <el-dropdown-item>
               个人中心
@@ -45,13 +44,11 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-import Placard from '@/components/placard'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Placard,
     Screenfull
   },
   computed: {
@@ -59,7 +56,18 @@ export default {
       'sidebar',
       'user',
       'device'
-    ])
+    ]),
+    show: {
+      get() {
+        return this.$store.state.settings.showRightPanel
+      },
+      set(val) {
+        this.$store.dispatch('changeSetting', {
+          key: 'showRightPanel',
+          value: val
+        })
+      }
+    }
   },
   methods: {
     toggleSideBar() {
